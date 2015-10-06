@@ -39,17 +39,16 @@ of 17,568 observations in this dataset.
 ## Procedure
 
 ### Loading and preprocessing the data
-```{r DataPreprocessing}
 
+```r
    # read data from dataset
    unzip(zipfile="activity.zip")
    data <- read.csv("activity.csv")
-
 ```
 
 ### What is mean total number of steps taken per day?
-```{r MeanStepsPerDay}
 
+```r
 # split the data to steps by day
 dateSplit <- split(data, data$date)
 
@@ -63,8 +62,11 @@ hist(totalStepsPerDay,
      xlab="Steps taken each day",
      ylab="Days Count",
      col="red")
+```
 
+![plot of chunk MeanStepsPerDay](figure/MeanStepsPerDay-1.png) 
 
+```r
 # Calculate and report the mean and median of the total number of steps taken per day
 
 # ================== Mean ======================
@@ -94,7 +96,11 @@ plot(x=meanStepsPerDay$date,y=meanStepsPerDay$meanSteps,
      ylab="Mean of steps per day", 
      type="l",
      col="blue")
+```
 
+![plot of chunk MeanStepsPerDay](figure/MeanStepsPerDay-2.png) 
+
+```r
 # ================= Median ======================
 medianStepsPerDay <- sapply(dateSplit, function(x) median(x[,"steps"],na.rm = TRUE))
 
@@ -112,8 +118,11 @@ plot(x=df$date,y=df$medianSteps,
      col="green")
 ```
 
+![plot of chunk MeanStepsPerDay](figure/MeanStepsPerDay-3.png) 
+
 ### What is the average daily activity pattern?
-```{r ActivityPattern}
+
+```r
 ## 1. Making a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 avgStepsPerInterval <- aggregate(x=list(avgSteps=data$steps),
@@ -138,20 +147,35 @@ max_avgSteps <- avgStepsPerInterval[index,]
 
 #where the average of steps is max:
 max_avgSteps
+```
 
+```
+##     interval avgSteps
+## 104      835 206.1698
+```
+
+```r
 ## adds one or more straight lines through the current plot, where the average of steps is max.
 #abline(v=max_avgSteps$interval ,col="green", lwd=1)
 abline(h=max_avgSteps$avgSteps ,col="green", lwd=1)
-
 ```
 
+![plot of chunk ActivityPattern](figure/ActivityPattern-1.png) 
+
 ### Imputing missing values
-```{r ImputingMissingValues}
+
+```r
 # The presence of missing values may introduce bias into some calculations or summaries of the data.
 
 # The total number of missing values in the dataset (i.e. the total number of rows with NAs)is:
 nrow(data) - nrow(na.omit(data))
+```
 
+```
+## [1] 2304
+```
+
+```r
 # Filling in all of the missing values in the dataset.
 # The strategy is using the mean for day, and the mean for 5-minute interval.
 
@@ -189,14 +213,14 @@ hist(totalStepsPerDay,
   xlab="Steps taken each day",
   ylab="Days Count",
   col="blue")
-
 ```
+
+![plot of chunk ImputingMissingValues](figure/ImputingMissingValues-1.png) 
 
 
 ### Are there differences in activity patterns between weekdays and weekends?
-```{r ActivityPatternsDifferences}
 
-
+```r
 # 1.Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
  
 dayType <- factor(c("weekday","weekend"))
@@ -241,8 +265,9 @@ plot(x=avgStepsPerInterval$interval,y=avgStepsPerInterval$avgSteps,
      col="brown")
 
 box(which = "figure", lty = '1373', col = 'blue')
-
 ```
+
+![plot of chunk ActivityPatternsDifferences](figure/ActivityPatternsDifferences-1.png) 
 
 ---
 [1]: https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip
